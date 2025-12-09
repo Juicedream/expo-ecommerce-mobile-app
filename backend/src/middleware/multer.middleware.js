@@ -3,7 +3,10 @@ import path from "path";
 // creating storage and filestorage name format of date and file original name
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`)
+        const ext = path.extname(file.originalname || "").toLowerCase();
+        const safeExt = [".jpeg", ".jpg", ".png", ".webp"].includes(ext) ? ext : "";
+        const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
+        cb(null, `${unique}${safeExt}`);
     }
 });
 // filter file type jpeg,jpg,png,webp only

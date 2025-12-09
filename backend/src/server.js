@@ -1,8 +1,11 @@
 import express from "express";
 import path from "path";
+import { clerkMiddleware } from "@clerk/express";
+import { serve } from "inngest/express";
+
+import { functions, inngest } from "./config/inngest.js";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
-import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
 
@@ -12,16 +15,14 @@ app.get("/api/health", (req, res) => {
     res.status(200).json({ message: "Success" });
 });
 
+// body parser
+app.use(express.json())
 // Clerk Middleware
 app.use(clerkMiddleware());
+// inngest server handler for the background jobs
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
-// For deployment
-// if (ENV.NODE_ENV === "production") {
-//     app.use(express.static(path.join(__dirname, "../admin/dist")));
-//     app.get("/{*any}", (req, res) => {
-//         res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"));
-//     })
-// }
+
 
 const startServer = async () => {
     await connectDB();

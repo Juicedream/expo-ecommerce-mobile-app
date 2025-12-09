@@ -69,7 +69,7 @@ class adminController {
       if (description) product.description = description;
       if (category) product.category = category;
       if (stock !== undefined) product.stock = parseInt(stock);
-      if (price) product.price = parseFloat(price);
+      if (price !== undefined) product.price = parseFloat(price);
 
       // handle image updates if new images are uploaded
       if (req.files && req.files > 0) {

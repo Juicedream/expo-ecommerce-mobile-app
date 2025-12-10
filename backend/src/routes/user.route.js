@@ -1,20 +1,20 @@
 import { Router } from "express";
-import userController from "../controllers/user.controller.js";
-import authMiddleware from "../middleware/auth.middleware.js";
+import UserController from "../controllers/user.controller.js";
+import AuthMiddleware from "../middleware/auth.middleware.js";
 const router = Router();
 
 //middleware
-router.use(authMiddleware.protectRoute)
+router.use(AuthMiddleware.protectRoute)
 // routers
 router
     // address routes
-  .post("/addresses", userController.addAddress)
-  .get("/addresses", userController.getAddress)
-  .put("/addresses/:addressId", userController.updateAddress)
-  .delete("/addresses/:addressId", userController.deleteAddress)
+  .post("/addresses", UserController.addAddress)
+  .get("/addresses", UserController.getAddress)
+  .put("/addresses/:addressId", UserController.updateAddress)
+  .delete("/addresses/:addressId", UserController.deleteAddress)
     // wishlist
-  .post("/wishlist", userController.addToWishlist)
-  .delete("/wishlist/:productId", userController.removeFromWishlist)
-  .get("/wishlist", userController.getWishlist)
+  .post("/wishlist", UserController.addToWishlist)
+  .delete("/wishlist/:productId", UserController.removeFromWishlist)
+  .get("/wishlist", UserController.getWishlist)
 
 export default router;

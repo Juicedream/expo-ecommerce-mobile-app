@@ -1,15 +1,15 @@
 import { Router } from "express";
-import authMiddleware from "../middleware/auth.middleware.js";
-import reviewController from "../controllers/review.controller.js";
+import AuthMiddleware from "../middleware/auth.middleware.js";
+import ReviewController from "../controllers/review.controller.js";
 const router = Router();
 
 // middleware
-router.use(authMiddleware.protectRoute);
+router.use(AuthMiddleware.protectRoute);
 // routes
 router
-    .post("/", reviewController.createReview)
+    .post("/", ReviewController.createReview)
     // 
-    .delete("/:reviewId", reviewController.deleteReview)
+    .delete("/:reviewId", ReviewController.deleteReview)
 
 
 export default router;

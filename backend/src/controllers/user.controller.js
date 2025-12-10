@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 // user controller
-class userController {
+class UserController {
   // add address
   addAddress = async (req, res) => {
     try {
@@ -156,4 +156,4 @@ class userController {
   };
 }
 
-export default new userController();
+export default new UserController();

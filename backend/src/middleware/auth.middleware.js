@@ -3,7 +3,7 @@ import { requireAuth } from "@clerk/express";
 import { User } from "../models/user.model.js";
 import { ENV } from "../config/env.js";
 
-class authMiddleware {
+class AuthMiddleware {
     protectRoute = [
         requireAuth(),
         async (req, res, next) => {
@@ -29,4 +29,4 @@ class authMiddleware {
 }
 
 
-export default new authMiddleware;
+export default new AuthMiddleware;

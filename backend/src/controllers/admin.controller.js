@@ -3,7 +3,7 @@ import { Product } from "../models/product.model.js";
 import { Order } from "../models/order.model.js";
 import { User } from "../models/user.model.js";
 //admin controller class
-class adminController {
+class AdminController {
   // create product
   createProduct = async (req, res) => {
     try {
@@ -186,4 +186,4 @@ class adminController {
   };
 }
 
-export default new adminController();
+export default new AdminController();

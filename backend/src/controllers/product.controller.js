@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 
-class productController {
+class ProductController {
   getProductById = async (req, res) => {
     try {
       const { id } = req.params;
@@ -21,4 +21,4 @@ class productController {
   };
 }
 
-export default new productController();
+export default new ProductController();

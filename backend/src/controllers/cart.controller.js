@@ -24,6 +24,7 @@ class cartController {
   addToCart = async (req, res) => {
     try {
       const { productId, quantity = 1 } = req.body;
+      const user = req.user;
       // validate if product exists and has stock
       if (!productId)
         return res.status(404).json({ error: "Product not found" });

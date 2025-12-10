@@ -8,6 +8,7 @@ import { functions, inngest } from "./config/inngest.js";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import adminRoutes  from "./routes/admin.route.js"
+import userRoutes from "./routes/user.route.js"
 
 const app = express();
 
@@ -22,12 +23,22 @@ app.use(clerkMiddleware()); // will add auth to the request (req.auth)
 app.use("/api/inngest", serve({ client: inngest, functions }));
 // routes
 app.use("/api/admin", adminRoutes)
+app.use("/api/users", userRoutes)
 
 
 // check if server is running
 app.get("/api/health", (req, res) => {
     res.status(200).json({ message: "Success" });
 });
+
+
+//For deployment
+if (ENV.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../admin/dist")));
+    app.get("/{*any}", (req, res) => {
+        res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"));
+    })
+}
 
 
 const startServer = async () => {

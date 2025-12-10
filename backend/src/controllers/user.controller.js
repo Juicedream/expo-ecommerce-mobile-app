@@ -15,6 +15,10 @@ class userController {
         isDefault,
       } = req.body;
       const user = req.user;
+      // if fields are missing
+      if (!fullName || !streetAddress || !city || !state || !zipCode) {
+        return res.status(400).json({ error: "Missing required address fields" })
+      }
       // if this is set as default unset other default as false
       if (isDefault) {
         user.addresses.forEach((addr) => {
@@ -124,7 +128,7 @@ class userController {
     try {
       const { productId } = req.params;
       const user = req.user;
-      if(!user.wishlist.includes(productId)) return res.status(400).json({ error: "Product is not even in the wishlist" });
+      if(!user.wishlist.includes(productId)) return res.status(400).json({ error: "Product not found in wishlist" });
       user.wishlist.pull(productId);
       await user.save();
       res.status(200).json({ message: "Product removed from wishlist", wishlist: user.wishlist });
@@ -139,7 +143,8 @@ class userController {
   // get wishlist
   getWishlist = async (req, res) => {
     try {
-        const user = req.user;
+        // using populate, bc wishlist is just an array of product ids
+        const user = await User.findById(req.user._id).populate("wishlist");
         res.status(200).json({ wishlist: user.wishlist });
     } catch (error) {
          console.error(

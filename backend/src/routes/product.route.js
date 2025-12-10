@@ -1,13 +1,13 @@
 import { Router } from "express";
-import authMiddleware from "../middleware/auth.middleware.js";
-import adminController from "../controllers/admin.controller.js";
-import productController from "../controllers/product.controller.js";
+import AuthMiddleware from "../middleware/auth.middleware.js";
+import AdminController from "../controllers/admin.controller.js";
+import ProductController from "../controllers/product.controller.js";
 const router = Router();
 
-router.use(authMiddleware.protectRoute)
+router.use(AuthMiddleware.protectRoute)
 //routes
 router
-    .get("/", adminController.getAllProducts)
-    .get("/:id", productController.getProductById)
+    .get("/", AdminController.getAllProducts)
+    .get("/:id", ProductController.getProductById)
 
 export default router;

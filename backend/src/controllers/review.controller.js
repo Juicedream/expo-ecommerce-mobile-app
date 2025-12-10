@@ -2,7 +2,7 @@ import { Order } from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
 import { Review } from "../models/review.model.js";
 
-class reviewController {
+class ReviewController {
   createReview = async (req, res) => {
     try {
       const { productId, orderId, rating } = req.body;
@@ -93,4 +93,4 @@ class reviewController {
   };
 }
 
-export default new reviewController();
+export default new ReviewController();

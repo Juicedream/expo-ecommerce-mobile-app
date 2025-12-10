@@ -3,7 +3,7 @@ import { Product } from "../models/product.model.js";
 import { Review } from "../models/review.model.js";
 
 // order controller
-class orderController {
+class OrderController {
     createOrder = async (req, res) => {
         try {
             const user = req.user;
@@ -64,4 +64,4 @@ class orderController {
     }
 }
 
-export default new orderController;
+export default new OrderController;

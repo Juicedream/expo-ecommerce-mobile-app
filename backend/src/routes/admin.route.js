@@ -1,22 +1,22 @@
 import { Router } from "express";
-import adminController from "../controllers/admin.controller.js";
-import authMiddleware from "../middleware/auth.middleware.js";
+import AdminController from "../controllers/admin.controller.js";
+import AuthMiddleware from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 const router = Router();
 
 //middleware optimization - DRY
-router.use(authMiddleware.protectRoute, authMiddleware.adminOnly);
+router.use(AuthMiddleware.protectRoute, AuthMiddleware.adminOnly);
 
 router
   // products
-  .post("/products", upload.array("images", 3), adminController.createProduct)
-  .put("/products/:id", adminController.updateProduct)
-  .get("/products", upload.array("images", 3), adminController.getAllProducts)
+  .post("/products", upload.array("images", 3), AdminController.createProduct)
+  .put("/products/:id", AdminController.updateProduct)
+  .get("/products", upload.array("images", 3), AdminController.getAllProducts)
   //orders
-  .get("/orders", adminController.getAllOrders)
-  .patch("/orders/:orderId/status", adminController.updateOrderStatus)
+  .get("/orders", AdminController.getAllOrders)
+  .patch("/orders/:orderId/status", AdminController.updateOrderStatus)
   // customers
-  .get("/customers", adminController.getAllCustomers)
-  .get("/stats", adminController.getDashboardStats)
+  .get("/customers", AdminController.getAllCustomers)
+  .get("/stats", AdminController.getDashboardStats)
 
 export default router;

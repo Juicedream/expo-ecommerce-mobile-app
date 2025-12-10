@@ -1,0 +1,132 @@
+import { User } from "../models/user.model.js";
+// user controller
+class userController {
+  // add address
+  addAddress = async (req, res) => {
+    try {
+      const {
+        label,
+        fullName,
+        streetAddress,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        isDefault,
+      } = req.body;
+      const user = req.user;
+      // if this is set as default unset other default as false
+      if (isDefault) {
+        user.addresses.forEach((addr) => {
+          addr.isDefault === false;
+        });
+      }
+      user.addresses.push({
+        label,
+        fullName,
+        streetAddress,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        isDefault: isDefault || false,
+      });
+      await user.save();
+      res.status(201).json({ addresses: user.addresses });
+    } catch (error) {
+      console.error("Error occurred in the add address controller:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  // get addresses
+  getAddress = async (req, res) => {
+    try {
+      const user = req.user;
+      res.status(200).json({ addresses: user.addresses });
+    } catch (error) {
+      console.error("Error occurred in the get address controller:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  // update address
+  updateAddress = async (req, res) => {
+    try {
+      const { addressId } = req.params;
+      const {
+        label,
+        fullName,
+        streetAddress,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        isDefault,
+      } = req.body;
+      const user = req.user;
+      const address = user.addresses.id(addressId);
+      if (!address) return res.status(404).json({ error: "Address not found" });
+      // if this is set as default, unset all other default
+      if (isDefault) {
+        user.addresses.forEach((addr) => {
+          addr.isDefault === false;
+        });
+        address.label = label || address.label;
+        address.fullName = fullName || address.fullName;
+        address.streetAddress = streetAddress || address.streetAddress;
+        address.city = city || address.city;
+        address.state = state || address.state;
+        address.zipCode = zipCode || address.zipCode;
+        address.phoneNumber = phoneNumber || address.phoneNumber;
+        address.isDefault =
+          isDefault !== undefined ? isDefault : address.isDefault;
+
+        await user.save();
+        res.status(200).json({ addresses: user.addresses });
+      }
+    } catch (error) {
+      console.error("Error occurred in the update address controller:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  // delete address
+  deleteAddress = async (req, res) => {
+    try {
+      const { addressId } = req.params;
+      const user = req.user;
+      user.addresses.pull(addressId);
+      await user.save();
+      res.status(200).json({ message: "Address deleted successfully", addresses: user.addresses });
+    } catch (error) {
+      console.error("Error occurred in the delete address controller:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  // add to wishlist
+  addToWishlist = async (req, res) => {
+    try {
+        const { productId } = req.body;
+        const user = req.user;
+
+        // Check if product is already in the wishlist
+    } catch (error) {
+         console.error(
+        "Error occurred in the add to wishlist controller:",
+        error
+      );
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  //remove from wishlist
+  removeFromWishlist = async (req, res) => {
+    try {
+      const { productId } = req.params;
+    } catch (error) {}
+  };
+  // get wishlist
+  getWishlist = async (req, res) => {
+    try {
+    } catch (error) {}
+  };
+}
+
+export default new userController();

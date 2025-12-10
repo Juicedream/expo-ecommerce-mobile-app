@@ -6,6 +6,10 @@ class reviewController {
   createReview = async (req, res) => {
     try {
       const { productId, orderId, rating } = req.body;
+      if (!productId || !orderId)
+        return res
+          .status(400)
+          .json({ error: "Product ID and Order ID are required" });
       if (!rating || rating < 1 || rating > 5)
         return res
           .status(400)
@@ -47,10 +51,9 @@ class reviewController {
       });
       // update the product rating
       const product = await Product.findById(productId);
-      const reviews = await Review.find({ productId });
-      const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
-      product.averageRating = totalRating / reviews.length;
-      product.totalReviews = reviews.length;
+      const currentTotal = product.averageRating * product.totalReviews;
+      product.totalReviews += 1;
+      product.averageRating = (currentTotal + rating) / product.totalReviews;
       await product.save();
 
       res
@@ -67,7 +70,7 @@ class reviewController {
       const user = req.user;
       const review = await Review.findById(reviewId);
       if (!review) return res.status(404).json({ error: "Review not found" });
-      if (!review.userId.toString())
+      if (review.userId.toString() !== user._id.toString())
         return res
           .status(403)
           .json({ error: "Not authorized to delete this review" });
@@ -81,9 +84,8 @@ class reviewController {
       await Product.findByIdAndUpdate(productId, {
         averageRating: reviews.length > 0 ? totalRating / reviews.length : 0,
         totalReviews: reviews.length,
-      })
+      });
       res.status(200).json({ message: "Review deleted successfully" });
-
     } catch (error) {
       console.error("Error occurred in the delete review controller:", error);
       res.status(500).json({ message: "Internal server error" });

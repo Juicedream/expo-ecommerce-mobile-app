@@ -106,8 +106,11 @@ class userController {
     try {
         const { productId } = req.body;
         const user = req.user;
-
-        // Check if product is already in the wishlist
+        // Check if product is already in the wishlist.
+        if(user.wishlist.includes(productId)) return res.status(400).json({ error: "Product already in wishlist" });
+        user.wishlist.push(productId);
+        await user.save();
+        res.status(200).json({ wishlist: user.wishlist });
     } catch (error) {
          console.error(
         "Error occurred in the add to wishlist controller:",
@@ -120,12 +123,31 @@ class userController {
   removeFromWishlist = async (req, res) => {
     try {
       const { productId } = req.params;
-    } catch (error) {}
+      const user = req.user;
+      if(!user.wishlist.includes(productId)) return res.status(400).json({ error: "Product is not even in the wishlist" });
+      user.wishlist.pull(productId);
+      await user.save();
+      res.status(200).json({ message: "Product removed from wishlist", wishlist: user.wishlist });
+    } catch (error) {
+         console.error(
+        "Error occurred in the remove from wishlist controller:",
+        error
+      );
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
   // get wishlist
   getWishlist = async (req, res) => {
     try {
-    } catch (error) {}
+        const user = req.user;
+        res.status(200).json({ wishlist: user.wishlist });
+    } catch (error) {
+         console.error(
+        "Error occurred in the get wishlist controller:",
+        error
+      );
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
 }
 

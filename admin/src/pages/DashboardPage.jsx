@@ -13,11 +13,11 @@ const DashboardPage = () => {
     queryFn: statsApi.getDashboard,
   })
   
-  const recentOrders = ordersData.slice(0,5) || [];
+  const recentOrders = ordersData?.slice(0,5) || [];
   const statsCards = [
     {
       name: "Total Revenue",
-      value: statsLoading ? "..." : `$${statsData.totalRevenue.toFixed(2) || 0}`,
+      value: statsLoading ? "..." : `$${statsData?.totalRevenue?.toFixed(2) || 0}`,
       icon: <DollarSignIcon className="size-8" />
     },
     {

@@ -40,9 +40,15 @@ app.get("/api/health", (_, res) => {
 //For deployment
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../admin/dist")));
-  app.get("/{*any}", (req, res) => {
+// Only catch non-API routes
+  app.get("*", (req, res) => {
+    // Don't catch API routes
+    if (req.path.startsWith('/api')) {
+      return res.status(404).json({ message: "API endpoint not found" });
+    }
     res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"));
   });
+
 }
 
 const startServer = async () => {

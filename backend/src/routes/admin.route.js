@@ -5,18 +5,18 @@ import { upload } from "../middleware/multer.middleware.js";
 const router = Router();
 
 //middleware optimization - DRY
-router.use(AuthMiddleware.protectRoute, AuthMiddleware.adminOnly);
+const middlewares = [AuthMiddleware.protectRoute, AuthMiddleware.adminOnly]
 
 router
   // products
-  .post("/products", upload.array("images", 3), AdminController.createProduct)
-  .put("/products/:id", AdminController.updateProduct)
-  .get("/products", upload.array("images", 3), AdminController.getAllProducts)
+  .post("/products", ...middlewares, upload.array("images", 3), AdminController.createProduct)
+  .put("/products/:id", ...middlewares, AdminController.updateProduct)
+  .get("/products", ...middlewares, upload.array("images", 3), AdminController.getAllProducts)
   //orders
-  .get("/orders", AdminController.getAllOrders)
-  .patch("/orders/:orderId/status", AdminController.updateOrderStatus)
+  .get("/orders", ...middlewares, AdminController.getAllOrders)
+  .patch("/orders/:orderId/status", ...middlewares, AdminController.updateOrderStatus)
   // customers
-  .get("/customers", AdminController.getAllCustomers)
-  .get("/stats", AdminController.getDashboardStats)
+  .get("/customers", ...middlewares, AdminController.getAllCustomers)
+  .get("/stats", ...middlewares, AdminController.getDashboardStats)
 
 export default router;

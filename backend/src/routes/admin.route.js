@@ -12,6 +12,7 @@ router
   .post("/products", ...middlewares, upload.array("images", 3), AdminController.createProduct)
   .put("/products/:id", ...middlewares, AdminController.updateProduct)
   .get("/products", ...middlewares, upload.array("images", 3), AdminController.getAllProducts)
+  .delete("/products/:id", AdminController.deleteProduct)
   //orders
   .get("/orders", ...middlewares, AdminController.getAllOrders)
   .patch("/orders/:orderId/status", ...middlewares, AdminController.updateOrderStatus)
